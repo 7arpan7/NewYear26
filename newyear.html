@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love ❤️</title>
+    
+    <!-- Importing Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --deep-pink: #c9184a;
+            --soft-pink: #fff0f3;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --text-dark: #590d22;
+            --shadow: 0 15px 35px rgba(201, 24, 74, 0.15);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Floating Hearts Animation */
+        .bg-hearts {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            animation: floatUp linear infinite;
+        }
+
+        /* Card Container */
+        .card-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 500px;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            position: relative;
+            max-height: 90vh; /* Prevent card from being taller than screen */
+            overflow-y: auto; /* Allow scrolling within card if content is long */
+        }
+
+        /* Scrollbar styling for the card itself */
+        .card::-webkit-scrollbar { width: 6px; }
+        .card::-webkit-scrollbar-thumb { background: #ffb3c1; border-radius: 10px; }
+
+        /* Typography */
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--deep-pink);
+            margin: 0 0 15px 0;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+            line-height: 1.2;
+        }
+
+        p, li {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        /* Timer Styling */
+        #timer-box {
+            background: #fff;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin: 25px 0;
+            display: inline-block;
+        }
+
+        #timer {
+            font-family: 'Courier New', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-pink);
+            letter-spacing: 2px;
+        }
+
+        /* Button Styling */
+        .btn {
+            background: linear-gradient(45deg, var(--primary-pink), var(--deep-pink));
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            position: relative;
+            overflow: hidden;
+            outline: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Utility Classes */
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
+
+        .sad-msg {
+            background: #fff5f8;
+            padding: 10px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-pink);
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #888;
+        }
+
+        /* Page 3 Specifics */
+        .letter-content {
+            text-align: left;
+            margin-top: 20px;
+            border-top: 1px dashed #ffc2d1;
+            padding-top: 20px;
+        }
+        
+        .letter-content strong { color: var(--deep-pink); }
+        ul { padding-left: 20px; margin-bottom: 20px; }
+
+        /* --- PHOTO GALLERY STYLES --- */
+        .photo-gallery-container {
+            margin: 25px 0;
+        }
+
+        .photo-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 15px;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+        }
+        
+        /* Hide scrollbar */
+        .photo-scroll::-webkit-scrollbar { display: none; }
+        .photo-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .memory-photo {
+            flex: 0 0 75%; /* Width of photo on mobile (75% of screen width) */
+            height: 350px;
+            object-fit: cover; /* Crops photo to fill box without distortion */
+            border-radius: 20px;
+            scroll-snap-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border: 2px solid white;
+            transition: transform 0.3s ease;
+        }
+
+        .swipe-hint {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* Spotify Wrapper */
+        .spotify-wrapper {
+            margin-top: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: transparent;
+            width: 100%;
+        }
+        
+        .spotify-wrapper iframe {
+            display: block;
+            border-radius: 12px;
+        }
+
+        /* Keyframe Animations */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animation Container -->
+    <div class="bg-hearts" id="bg-hearts"></div>
+
+    <div class="card-container">
+        
+        <!-- PAGE 1: Countdown & Intro -->
+        <div id="page1" class="card fade-in">
+            <h1>To My Favorite Person ❤️</h1>
+            <p>Counting down to our next chapter...</p>
+            
+            <div id="timer-box">
+                <div id="timer">00:00:00</div>
+            </div>
+
+            <button class="btn" onclick="handleButtonOne()">Click for a Surprise</button>
+            <div id="sad-note" class="sad-msg hidden">Please don't be sad... your surprise is ripening! 🥺💕</div>
+        </div>
+
+        <!-- PAGE 2: The Tease -->
+        <div id="page2" class="card hidden">
+            <h1 id="tease-text" style="font-size: 2rem;">Wait a bit...</h1>
+            <button class="btn" onclick="handleButtonTwo()">Try again? (I promise it's worth it)</button>
+        </div>
+
+        <!-- PAGE 3: The Grand Finale -->
+        <div id="page3" class="card hidden">
+            <h1>Happy New Year, My World! 🎆</h1>
+            <div class="letter-content">
+                <p><strong>To My Beautiful Princess:</strong></p>
+                <p>I have a confession: I am completely and extremely <strong>obsessed with you</strong>. Everything about you—from the way you talk to the tiny things you do—makes me fall for you all over again every day.</p>
+                
+                <p>Every single day, I find myself more obsessed with you. It’s the way you smile, the way you think, and the way you make me feel like the luckiest person alive. 💖</p>
+                
+                <p><strong>In 2026, my goals are simple:</strong></p>
+                <ul>
+                    <li>To love you more than I did yesterday.</li>
+                    <li>To be the reason behind your biggest smiles.</li>
+                    <li>To build a future that is as beautiful as you are.</li>
+                </ul>
+                
+                <p style="margin-bottom: 0;">I can't wait to spend every second of this year by your side. You are my everything! ❤️</p>
+            </div>
+
+            <!-- PHOTO GALLERY SECTION -->
+            <div class="photo-gallery-container">
+                <h2 style="font-family:'Dancing Script'; color: var(--deep-pink);">Our Memories 📸</h2>
+                <div class="photo-scroll">
+                    <!-- PHOTO 1 -->
+                    <!-- Replace 'src' below with your image file path (e.g., "img/photo1.jpg") -->
+                    <img src="Photo4.jpeg" class="memory-photo" alt="Memory 1">
+                    
+                    <!-- PHOTO 2 -->
+                    <img src="Photo3.jpeg" class="memory-photo" alt="Memory 2">
+                    
+                    <!-- PHOTO 3 -->
+
+                    <img src="Photo1.jpeg" class="memory-photo" alt="Memory 3">
+                </div>
+                <p class="swipe-hint">← Swipe for more →</p>
+            </div>
+            
+            <!-- SPOTIFY PLAYER -->
+            <div class="spotify-wrapper">
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/69oxllULO1PeIO1VHT97uk?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay=1; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Canvas for Confetti Effect -->
+    <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:20;"></canvas>
+
+    <script>
+        /* ----------------------------------------------------------------
+           1. CONFIGURATION & TIMER LOGIC
+           ---------------------------------------------------------------- */
+        
+        // TARGET TIME: Jan 1st, 2026
+        // For testing: const targetDate = new Date().getTime() + 10000;
+        const targetDate = new Date("Jan 01, 2026 00:00:00").getTime();
+
+        const timerEl = document.getElementById("timer");
+
+        const timerInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                clearInterval(timerInterval);
+                timerEl.innerText = "00:00:00";
+                timerEl.style.color = "#c9184a";
+                return;
+            }
+
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            timerEl.innerText = 
+                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+        }, 1000);
+
+        /* ----------------------------------------------------------------
+           2. NAVIGATION LOGIC
+           ---------------------------------------------------------------- */
+        
+        const teaseMessages = [
+            "Patience, Cutu! Good things come to those who wait. 😘",
+            "Not yet! But I'm already thinking about how lucky I am to have you.",
+            "Still a bit of time left in 2025. Let's cherish these last moments!",
+            "I know you're excited, but the best is yet to come! ✨"
+        ];
+        
+        let clickCount = 0;
+
+        function isTimeUp() {
+            return new Date().getTime() >= targetDate;
+        }
+
+        function handleButtonOne() {
+            if (isTimeUp()) {
+                transitionToPage(3);
+            } else {
+                transitionToPage(2);
+                document.getElementById("tease-text").innerText = teaseMessages[0];
+            }
+        }
+
+        function handleButtonTwo() {
+            if (isTimeUp()) {
+                transitionToPage(3);
+            } else {
+                clickCount++;
+                if (clickCount < teaseMessages.length) {
+                    document.getElementById("tease-text").innerText = teaseMessages[clickCount];
+                } else {
+                    clickCount = 0;
+                    transitionToPage(1);
+                    document.getElementById("sad-note").classList.remove("hidden");
+                }
+            }
+        }
+
+        function transitionToPage(pageNumber) {
+            // Hide all pages
+            document.querySelectorAll('.card').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('fade-in');
+            });
+
+            // Show target page
+            const targetPage = document.getElementById(`page${pageNumber}`);
+            targetPage.classList.remove('hidden');
+            targetPage.classList.add('fade-in');
+
+            // Special Trigger for Page 3
+            if (pageNumber === 3) {
+                startConfetti();
+            }
+        }
+
+        /* ----------------------------------------------------------------
+           3. VISUAL EFFECTS (Background Hearts & Confetti)
+           ---------------------------------------------------------------- */
+
+        // A. Floating Background Hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('bg-hearts');
+            const heartCount = 15;
+            
+            for(let i=0; i<heartCount; i++) {
+                const div = document.createElement('div');
+                div.classList.add('bg-heart');
+                div.innerHTML = '❤';
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                div.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                div.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(div);
+            }
+        }
+        createFloatingHearts();
+
+        // B. Confetti/Heart Rain for Finale
+        const canvas = document.getElementById("confetti-canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+        let animationId;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20; 
+                this.size = Math.random() * 15 + 10;
+                this.speedY = Math.random() * 3 + 2;
+                this.speedX = Math.random() * 2 - 1;
+                this.color = ['#ff4d6d', '#c9184a', '#ff758f', '#fff0f3'][Math.floor(Math.random() * 4)];
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 4 - 2;
+                this.text = Math.random() > 0.5 ? '❤' : '✨'; 
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+                if (this.y > canvas.height) {
+                    this.y = -20;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                ctx.font = this.size + "px Arial";
+                ctx.fillText(this.text, 0, 0);
+                ctx.restore();
+            }
+        }
+
+        function startConfetti() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            animationId = requestAnimationFrame(animateConfetti);
+        }
+    </script>
+</body>
+</html>
